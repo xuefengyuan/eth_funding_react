@@ -98,7 +98,8 @@ contract Funding {
         manager = _creator;
         projectName = _projectName;
         targetMoney = _targetMoney;
-        supportMoney = _supportMoney * 10 ** 18;
+        supportMoney = _supportMoney;
+        // supportMoney = _supportMoney * 10 ** 18;
         endTime = block.timestamp + _duration;
         //当前时间+持续时间=终止时间
 

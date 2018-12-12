@@ -1,11 +1,22 @@
 import {fundingFactoryInstance, newFundingInstance} from "./instance";
 
-let getCreatorFundingDetails = async () => {
+let getFundingDetails = async (index) => {
+
+
+    // index 1 : 所有的页面， 2: 我发起的页面， 3：我参与的页面
+    let currentFundings = []
+    if (index === 1) {
+
+        currentFundings = await fundingFactoryInstance.methods.getAllFundings().call();
+    } else if (index === 2) {
+        currentFundings = await fundingFactoryInstance.methods.getCreatorFundings().call();
+    } else if (index === 3) {
+        currentFundings = await fundingFactoryInstance.methods.getSupportorFunding().call();
+    }
 
     // funding地址的数组
-    let creatorFundingDetails = await fundingFactoryInstance.methods.getCreatorFundings().call();
 
-    let detailsPromise = creatorFundingDetails.map(async function (fundingAddress) {
+    let detailsPromise = currentFundings.map(async function (fundingAddress) {
         console.log(fundingAddress)
 
         return new Promise(async (resolve, reject) => {
@@ -19,8 +30,24 @@ let getCreatorFundingDetails = async () => {
                 let projectName = await newInstance.methods.projectName().call();
                 let targetMoney = await newInstance.methods.targetMoney().call();
                 let supportMoney = await newInstance.methods.supportMoney().call();
-                let endTime = await newInstance.methods.endTime().call();
-                let detail = {fundingAddress,manager, projectName, targetMoney, supportMoney, endTime}
+                let leftTime = await newInstance.methods.getLeftTime().call();
+
+                let balance = await newInstance.methods.getBalance().call();
+
+                let investorCount = await newInstance.methods.getInvestorsCount().call();
+
+
+                let detail = {
+                    fundingAddress,
+                    manager,
+                    projectName,
+                    targetMoney,
+                    supportMoney,
+                    leftTime,
+                    balance,
+                    investorCount
+                }
+
                 // console.table(detail);
                 resolve(detail)
             } catch (e) {
@@ -34,5 +61,5 @@ let getCreatorFundingDetails = async () => {
 }
 
 export {
-    getCreatorFundingDetails,
+    getFundingDetails,
 }

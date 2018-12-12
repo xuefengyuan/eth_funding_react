@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {fundingFactoryInstance, newFundingInstance} from '../../eth/instance';
-import {getCreatorFundingDetails} from "../../eth/interaction";
+import {getFundingDetails} from "../../eth/interaction";
 import CardList from "../common/CardList";
+import CreateFundingForm from "./CreateFundingForm";
 
 class CreatorFundingTab extends Component {
 
@@ -12,7 +13,7 @@ class CreatorFundingTab extends Component {
     async componentWillMount() {
         // funding地址的数组
         // let creatorFundingDetails = await fundingFactoryInstance.methods.getCreatorFundings().call();
-        let creatorFundingDetails = await getCreatorFundingDetails();
+        let creatorFundingDetails = await getFundingDetails(2);
         // console.table(creatorFundingDetails)
 
        /* let dtails = creatorFundingDetails.map(async function (funddingAddress) {
@@ -51,6 +52,7 @@ class CreatorFundingTab extends Component {
         return (
             <div>
                 <CardList details = {this.state.creatorFundingDetails}/>
+                <CreateFundingForm/>
             </div>
 
         )
