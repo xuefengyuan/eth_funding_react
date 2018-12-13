@@ -5,6 +5,7 @@ const src = '/images/daniel.jpg'
 
 const CardList = (props) => {
     let details = props.details;
+    let onCardClick = props.onCardClick;
 
     console.table(details)
 
@@ -12,6 +13,7 @@ const CardList = (props) => {
         return <CardFunding
             key={detail.fundingAddress}
             detail ={detail}
+            onCardClick={onCardClick}  // 继续传递到下一层
         />
     })
 
@@ -30,11 +32,12 @@ const CardList = (props) => {
 
 const CardFunding = (props) => {
     let detail = props.detail;
-    console.table(detail)
+    let onCardClick = props.onCardClick
+    // console.table(detail)
     let {fundingAddress,manager, projectName, targetMoney, supportMoney, leftTime,balance,investorCount} = detail;
     let percent = parseFloat(balance) / parseFloat(targetMoney) * 100
     return(
-        <Card>
+        <Card onClick={() => onCardClick && onCardClick(detail)}>
             <Image src='/images/daniel.jpg' />
             <Card.Content>
                 <Card.Header>{projectName}</Card.Header>

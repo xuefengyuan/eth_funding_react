@@ -108,16 +108,21 @@ contract Funding {
         supportorFundings = _supportorFundings;
     }
 
-    //使用一个mapping来判断一个地址是否是投资人，这样可以快速识别是否有投票资格
+    // 使用一个mapping来判断一个地址是否是投资人，一个众筹只能投一次
     mapping(address => bool) isInvestorMap;
+    // 另外使用一个mapping来判断地址是否是投资人，这样可以快速识别是否有投票资格
+    // mapping(address => bool) isFinalizeMap;
 
-
+    // 投资函数
     function invest() payable public {
         require(msg.value == supportMoney);
+        // 该项目投资过就不让投了，一个项目只能投资一次
+        require(isInvestorMap[msg.sender]==false);
 
         investors.push(msg.sender);
 
         isInvestorMap[msg.sender] = true;
+        // isFinalizeMap[msg.sender] = true;
 
 
         // 将投资人与当前合约的地址传递到FundingFactory中
@@ -156,6 +161,7 @@ enum RequstStatus {
 
     Request[] public allRequests; //所有的花费请求的集合
 
+    // 创建一个花费请求函数，1、花费说明，2、花多少钱，3、花给谁
     function createRequest(string _purpose, uint256 _cost, address _seller) onlyManager public {
         Request memory req = Request({
             purpose : _purpose,
@@ -176,7 +182,8 @@ enum RequstStatus {
     function approveRequest(uint256 i) public {
 
         //快速识别是否有投票资格
-        require(isInvestorMap[msg.sender]);
+        // require(isFinalizeMap[msg.sender] = true);
+        require(isInvestorMap[msg.sender] == true);
 
         //一定要使用storage类型，引用类型，否则无法修改allRequests里面的数据
         Request storage req = allRequests[i];
@@ -189,7 +196,7 @@ enum RequstStatus {
         req.isVotedMap[msg.sender] = true;
     }
 
-
+    // 花钱的请求，前提是合约的钱和参与要投票过半才能执行成功
     function finalizeRequest(uint256 i) onlyManager public {
         Request storage req = allRequests[i];
 
