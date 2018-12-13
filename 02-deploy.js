@@ -9,7 +9,7 @@ let HDWalletProvider = require('truffle-hdwallet-provider');
 let web3 = new Web3();
 
 // 助记词
-let terms = 'survey place parent fly ritual lake renew flat laptop horn behind funny'
+let terms = ''
 // 连接网络地址
 // let netIp = 'https://ropsten.infura.io/v3/02cd1e3c295c425597fa105999493baa'
 let netIp = 'http://127.0.0.1:8545'
